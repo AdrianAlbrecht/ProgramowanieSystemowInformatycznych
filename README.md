@@ -1,1 +1,4 @@
-Temat projektu: NIE WIEM
+# Temat projektu: NIE WIEM
+## Autorzy: 
+## - Jan Brunow
+## - Adrian Albrecht
