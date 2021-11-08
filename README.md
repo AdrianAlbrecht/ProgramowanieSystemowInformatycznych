@@ -9,7 +9,7 @@
 * Django
 * MySQL
 ## Database model
-
+![image](https://github.com/AdrianAlbrecht/ProgramowanieSystemowInformatycznych/blob/master/vaccine_db_model.png)
 ## Authors: 
 * Jan Brunow
 * Adrian Albrecht
