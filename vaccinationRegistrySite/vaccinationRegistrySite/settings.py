@@ -75,7 +75,7 @@ WSGI_APPLICATION = 'vaccinationRegistrySite.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'mysql.connector.django', #bo to co Pan Doktor podał nie działa bo przy pip install mysqlclient dostaję error, którego nawet StackOverflow nie rozwiązuje
+        'ENGINE': 'django.db.backends.mysql',
         'NAME': 'vaccinationcenter',
         'USER': 'siteServiceAccount',
         'PASSWORD': 'vaccine',
