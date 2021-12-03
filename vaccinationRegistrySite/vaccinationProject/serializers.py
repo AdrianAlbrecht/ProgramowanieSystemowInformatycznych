@@ -3,7 +3,7 @@ class UserDetailSerializer(serializers.Serializer):
     firstname = serializers.CharField(max_length=45, blank=False, null=False)
     lastname = serializers.CharField(max_length=45, blank=False, null=False)
     pesel = serializers.CharField(max_length=11, blank=False, null=False)
-    date_of_birth = serializers.DateField
+    date_of_birth = serializers.DateField()
     country = serializers.CharField(max_length=45)
     city = serializers.CharField(max_length=45)
     street = serializers.CharField(max_length=45)
@@ -113,7 +113,7 @@ class FacilitySerializer(serializers.Serializer):
         return instance
 
 class VisitSerializer(serializers.Serializer):
-    visit_date = serializers.DateTimeField
+    visit_date = serializers.DateTimeField()
     # id_patient = serializers.ForeignKey(User, null=True, blank=True, on_delete=serializers.DO_NOTHING, default="")
     # id_facility = serializers.ForeignKey(Facility, null=False, blank=False, on_delete=serializers.DO_NOTHING)
     # id_vaccine = serializers.ForeignKey(Vaccine, null=False, blank=False, on_delete=serializers.DO_NOTHING)
