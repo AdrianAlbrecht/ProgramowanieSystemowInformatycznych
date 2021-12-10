@@ -1,8 +1,9 @@
 from rest_framework import serializers
+
 class UserDetailSerializer(serializers.Serializer):
-    firstname = serializers.CharField(max_length=45, blank=False, null=False)
-    lastname = serializers.CharField(max_length=45, blank=False, null=False)
-    pesel = serializers.CharField(max_length=11, blank=False, null=False)
+    firstname = serializers.CharField(max_length=45)
+    lastname = serializers.CharField(max_length=45)
+    pesel = serializers.CharField(max_length=11 )
     date_of_birth = serializers.DateField()
     country = serializers.CharField(max_length=45)
     city = serializers.CharField(max_length=45)
