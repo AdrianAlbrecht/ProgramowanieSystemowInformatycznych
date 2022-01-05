@@ -60,7 +60,8 @@ class Facility(models.Model):
 
 
 class Visit(models.Model):
-    visit_date = models.DateTimeField(blank=True, default='1000-01-01 00:00:00')
+    visit_date = models.DateField(blank=True, default='1000-01-01')
+    visit_time = models.TimeField(blank=True, default='00:00:00')
     id_patient = models.ForeignKey(User, related_name='visit', null=True, blank=True, on_delete=models.DO_NOTHING, default="")
     id_facility = models.ForeignKey(Facility, related_name='visit', null=False, blank=False, on_delete=models.DO_NOTHING)
     id_vaccine = models.ForeignKey(Vaccine, related_name='visit', null=False, blank=False, on_delete=models.DO_NOTHING)

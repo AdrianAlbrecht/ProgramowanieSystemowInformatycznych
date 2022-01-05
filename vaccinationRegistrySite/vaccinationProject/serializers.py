@@ -27,9 +27,9 @@ class FacilitySerializer(serializers.HyperlinkedModelSerializer):
 
 
 class VisitSerializer(serializers.HyperlinkedModelSerializer):
-    id_patient = serializers.SlugRelatedField(queryset=UserDetails.objects.all(),slug_field="id")
+    id_patient = serializers.SlugRelatedField(queryset=User.objects.all(),slug_field="id")
     id_facility = serializers.SlugRelatedField(queryset=Facility.objects.all(),slug_field="id")
     id_vaccine = serializers.SlugRelatedField(queryset=Vaccine.objects.all(),slug_field="id")
     class Meta:
         model = Visit
-        fields = ['id','visit_date','id_patient','id_facility','id_vaccine', 'took_place']
+        fields = ['id','visit_date', "visit_time",'id_patient','id_facility','id_vaccine', 'took_place']

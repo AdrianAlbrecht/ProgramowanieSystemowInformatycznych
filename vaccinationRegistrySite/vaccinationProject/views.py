@@ -16,8 +16,7 @@ class UserList(APIView):
         return Response(serializer.data)
 
     def post(self, request, format=None):
-        data = JSONParser().parse(request)
-        serializer = UserSerializer(data)
+        serializer = UserSerializer(data=request.data)
         if serializer.is_valid():
             serializer.save()
             return Response(serializer.data, status=status.HTTP_201_CREATED)
@@ -58,8 +57,7 @@ class UserDetailsList(APIView):
         return Response(serializer.data)
 
     def post(self, request, format=None):
-        data = JSONParser().parse(request)
-        serializer = UserDetailSerializer(data)
+        serializer = UserDetailSerializer(data=request.data)
         if serializer.is_valid():
             serializer.save()
             return Response(serializer.data, status=status.HTTP_201_CREATED)
@@ -100,8 +98,7 @@ class VaccineList(APIView):
         return Response(serializer.data)
 
     def post(self, request, format=None):
-        data = JSONParser().parse(request)
-        serializer = VaccineSerializer(data)
+        serializer = VaccineSerializer(data=request.data)
         if serializer.is_valid():
             serializer.save()
             return Response(serializer.data, status=status.HTTP_201_CREATED)
@@ -141,8 +138,7 @@ class FacilityList(APIView):
         return Response(serializer.data)
 
     def post(self, request, format=None):
-        data = JSONParser().parse(request)
-        serializer = FacilitySerializer(data)
+        serializer = FacilitySerializer(data = request.data)
         if serializer.is_valid():
             serializer.save()
             return Response(serializer.data, status=status.HTTP_201_CREATED)
@@ -183,8 +179,7 @@ class VisitList(APIView):
         return Response(serializer.data)
 
     def post(self, request, format=None):
-        data = JSONParser().parse(request)
-        serializer = VisitSerializer(data)
+        serializer = VisitSerializer(data=request.data)
         if serializer.is_valid():
             serializer.save()
             return Response(serializer.data, status=status.HTTP_201_CREATED)
