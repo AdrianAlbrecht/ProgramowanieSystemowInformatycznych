@@ -10,7 +10,7 @@ class UserDetails(models.Model):
     firstname = models.CharField(max_length=45, blank=False, null=False)
     lastname = models.CharField(max_length=45, blank=False, null=False)
     pesel = models.CharField(max_length=11, blank=False, null=False)
-    date_of_birth = models.DateField()
+    date_of_birth = models.DateField(default='1500-01-01')
     country = models.CharField(max_length=45)
     city = models.CharField(max_length=45)
     street = models.CharField(max_length=45)
@@ -60,11 +60,11 @@ class Facility(models.Model):
 
 
 class Visit(models.Model):
-    visit_date=models.DateTimeField()
+    visit_date = models.DateTimeField(blank=True, default='1000-01-01 00:00:00')
     id_patient = models.ForeignKey(User, null=True, blank=True, on_delete=models.DO_NOTHING, default="")
     id_facility = models.ForeignKey(Facility, null=False, blank=False, on_delete=models.DO_NOTHING)
     id_vaccine = models.ForeignKey(Vaccine, null=False, blank=False, on_delete=models.DO_NOTHING)
-    took_place=models.BooleanField()
+    took_place=models.BooleanField(default=False)
     
     def __str__(self):
         return "%s %s %s" % (self.id_patient, self.id_facility, self.id_vaccine)

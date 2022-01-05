@@ -1,6 +1,7 @@
 from rest_framework import serializers
 
 class UserDetailSerializer(serializers.Serializer):
+    id = serializers.IntegerField(read_only=True)
     firstname = serializers.CharField(max_length=45)
     lastname = serializers.CharField(max_length=45)
     pesel = serializers.CharField(max_length=11 )
@@ -43,6 +44,7 @@ class UserDetailSerializer(serializers.Serializer):
 
 class UserSerializer(serializers.Serializer):
     # id_user_details = serializers.OneToOneField(UserDetails, on_delete=serializers.CASCADE)
+    id = serializers.IntegerField(read_only=True)
     username = serializers.CharField(max_length=45)
     password = serializers.CharField(max_length=45)
     role = serializers.CharField(max_length=45)
