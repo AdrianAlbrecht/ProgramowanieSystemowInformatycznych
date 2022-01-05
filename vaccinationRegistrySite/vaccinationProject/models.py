@@ -28,7 +28,7 @@ class UserDetails(models.Model):
 class User(models.Model):
     id_user_details = models.OneToOneField(
         UserDetails, on_delete=models.CASCADE)
-    username = models.CharField(max_length=45)
+    username = models.CharField(max_length=45,)
     password = models.CharField(max_length=45)
     role = models.CharField(max_length=45)
     email = models.EmailField(max_length=45)

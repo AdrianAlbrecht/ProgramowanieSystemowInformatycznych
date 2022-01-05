@@ -12,6 +12,8 @@ https://docs.djangoproject.com/en/3.2/ref/settings/
 
 from pathlib import Path
 
+from django.utils.translation import templatize
+
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
@@ -54,7 +56,7 @@ ROOT_URLCONF = 'vaccinationRegistrySite.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [],
+        'DIRS': ['./templates'],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -69,6 +71,28 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'vaccinationRegistrySite.wsgi.application'
 
+ADMINS = [('Your admin name', 'Your admin email')]
+MANAGERS = ADMINS
+# Email
+# https://docs.djangoproject.com/en/4.0/topics/email/
+EMAIL_HOST = 'smtp.gmail.com'
+EMAIL_PORT = 587
+EMAIL_USE_TLS = True
+EMAIL_USE_LOCALTIME = False
+EMAIL_HOST_USER = 'test.ProgAppWeb@gmail.com'
+EMAIL_HOST_PASSWORD = 'ProgAppWeb'
+
+CACHES = {
+    'default': {
+        'BACKEND': 'django.core.cache.backends.db.DatabaseCache',
+        'LOCATION': 'cache',
+        'TIMEOUT': 500,
+        'OPTIONS': {
+            'MAX_ENTRIES': 1500
+        }
+    }
+}
+
 # Database
 # https://docs.djangoproject.com/en/3.2/ref/settings/#databases
 
@@ -76,10 +100,53 @@ DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
         'NAME': 'vaccinationcenter',
-        'USER': 'siteServiceAccount',
-        'PASSWORD': 'vaccine',
+        'USER': 'root',
+        'PASSWORD':'',
         'HOST': 'localhost',
         'PORT': '3306',
+    }
+}
+# Logging
+# https://docs.djangoproject.com/en/4.0/topics/logging/
+
+LOGGING = {
+    'version': 1,
+    'disable_existing_loggers': False,
+    'formatters': {
+        'verbose': {
+            'format': '{levelname} {asctime} {module} {message}',
+            'style': '{',
+        },
+        'simple': {
+            'format': '{levelname} {message}',
+            'style': '{',
+        },
+    },
+    'filters': {
+        'require_debug_true': {
+            '()': 'django.utils.log.RequireDebugTrue'
+        },
+    },
+    'handlers': {
+        'info_file': {
+            'level': 'INFO',
+            'class': 'logging.FileHandler',
+            'formatter': 'verbose',
+            'filename': BASE_DIR / 'info_logs.log',
+        },
+        'console': {
+            'level': 'INFO',
+            'filters': ['require_debug_true'],
+            'class': 'logging.StreamHandler',
+            'formatter': 'simple'
+        }, 
+    },
+    'loggers': {
+        'vaccinationRegisterSite_info': {
+            'handlers': ['console','info_file'],
+            'level': 'INFO',
+            'propagate': True,
+        },
     }
 }
 
