@@ -13,4 +13,5 @@ urlpatterns = [
     path('facilities/<int:pk>', views.FacilityDetail.as_view(), name="facility"),
     path('visits', views.VisitList.as_view(), name="visits"),
     path('visits/<int:pk>', views.VisitDetail.as_view(), name="visit"),
+    path('freevisits', views.FreeVisitList.as_view(), name="freevisits"),
 ]

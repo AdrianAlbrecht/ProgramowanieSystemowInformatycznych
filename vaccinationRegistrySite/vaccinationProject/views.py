@@ -2,6 +2,7 @@ from rest_framework.response import Response
 from .models import *
 from .serializers import *
 from rest_framework import generics
+from datetime import date
 
 def index(request):
     return Response("Hello, world. You're at the vaccination page.")
@@ -54,4 +55,9 @@ class VisitList(generics.ListCreateAPIView):
 
 class VisitDetail(generics.RetrieveUpdateDestroyAPIView):
     queryset = Visit.objects.all()
+    serializer_class = VisitSerializer
+    
+
+class FreeVisitList(generics.ListAPIView):
+    queryset = Visit.objects.filter(id_patient=None, visit_date__gte =date.today())
     serializer_class = VisitSerializer

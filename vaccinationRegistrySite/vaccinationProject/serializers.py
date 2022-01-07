@@ -2,6 +2,7 @@ from rest_framework import serializers
 from .models import *
 
 class UserDetailSerializer(serializers.HyperlinkedModelSerializer):
+    apartament_number = serializers.CharField(required=False)
     class Meta:
         model = UserDetails
         fields = ['id', 'firstname','lastname','pesel','date_of_birth','country','city','street','house_number','apartament_number','zip_code','phone_number','gender','is_vaccinated']
