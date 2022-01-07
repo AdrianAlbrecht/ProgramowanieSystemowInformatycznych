@@ -22,7 +22,7 @@ class UserDetails(models.Model):
     is_vaccinated = models.BooleanField(default=False)
     
     def __str__(self):
-        return "%s" % self.pesel
+        return self.pesel
 
 
 class User(models.Model):
@@ -35,7 +35,7 @@ class User(models.Model):
     is_active = models.BooleanField(default=True)
     
     def __str__(self):
-        return "%s" % self.username
+        return self.username
 
     
     
@@ -45,7 +45,7 @@ class Vaccine(models.Model):
     name = models.CharField(max_length=45)
     
     def __str__(self):
-        return "%s" % self.name
+        return self.name
 
 
 class Facility(models.Model):
@@ -56,7 +56,7 @@ class Facility(models.Model):
     contact_phone = models.CharField(max_length=12)
     
     def __str__(self):
-        return "%s" % self.name
+        return self.name
 
 
 class Visit(models.Model):
@@ -68,4 +68,4 @@ class Visit(models.Model):
     took_place=models.BooleanField(default=0)
     
     def __str__(self):
-        return "%s %s %s" % (self.id_patient, self.id_facility, self.id_vaccine)
+        return  self.visit_date+self.visit_time
