@@ -14,4 +14,5 @@ urlpatterns = [
     path('visits', views.VisitList.as_view(), name="visits"),
     path('visits/<int:pk>', views.VisitDetail.as_view(), name="visit"),
     path('freevisits', views.FreeVisitList.as_view(), name="freevisits"),
+    path('profile<int:profile_id>', views.Profile.as_view(), name="profile"),
 ]
