@@ -59,5 +59,8 @@ class VisitDetail(generics.RetrieveUpdateDestroyAPIView):
     
 
 class FreeVisitList(generics.ListAPIView):
-    queryset = Visit.objects.filter(id_patient=None, visit_date__gte =date.today())
+    queryset = Visit.objects.filter(id_patient=None, visit_date__gte=date.today()).order_by('visit_date', 'visit_time')
     serializer_class = VisitSerializer
+    
+
+#TODO: FreeVisitRegister
