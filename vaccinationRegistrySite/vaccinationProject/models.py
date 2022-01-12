@@ -1,4 +1,5 @@
 from django.db import models
+from django.contrib.auth.models import User
 
 # created = models.DateTimeField(auto_now_add=True)
 # title = models.CharField(max_length=100, blank=True, null=True, default='')
@@ -26,12 +27,10 @@ class UserDetails(models.Model):
 
 
 class User(models.Model):
+    user= models.OneToOneField(User, on_delete=models.CASCADE)
     id_user_details = models.OneToOneField(
         UserDetails, related_name="user",  on_delete=models.CASCADE)
-    username = models.CharField(max_length=45)
-    password = models.CharField(max_length=45)
     role = models.CharField(max_length=45)
-    email = models.EmailField(max_length=45)
     is_active = models.BooleanField(default=True)
     
     def __str__(self):
@@ -66,6 +65,6 @@ class Visit(models.Model):
     id_facility = models.ForeignKey(Facility, related_name='visit', null=False, blank=False, on_delete=models.DO_NOTHING)
     id_vaccine = models.ForeignKey(Vaccine, related_name='visit', null=False, blank=False, on_delete=models.DO_NOTHING)
     took_place=models.BooleanField(default=0)
-    
+    owner= models.ForeignKey('auth.User', related_name='aaa', on_delete=models.CASCADE, null=True)
     def __str__(self):
         return  self.visit_date+self.visit_time

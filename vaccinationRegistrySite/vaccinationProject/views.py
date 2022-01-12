@@ -3,7 +3,7 @@ from .models import *
 from .serializers import *
 from rest_framework import generics
 from datetime import date
-from rest_framework import status
+from rest_framework import status, permissions 
 from rest_framework.reverse import reverse
 from django_filters import FilterSet, DateFilter, TimeFilter, BooleanFilter, NumberFilter, CharFilter, ModelChoiceFilter
 
@@ -52,6 +52,7 @@ class UserDetailsDetail(generics.RetrieveUpdateDestroyAPIView):
 
 
 class VaccineList(generics.ListCreateAPIView):
+    permission_classes=[permissions.DjangoModelPermissions, permissions.IsAdminUser]
     queryset = Vaccine.objects.all()
     serializer_class = VaccineSerializer
     name = "vaccines-list"
@@ -61,12 +62,14 @@ class VaccineList(generics.ListCreateAPIView):
 
 
 class VaccineDetail(generics.RetrieveUpdateDestroyAPIView):
+    permission_classes=[permissions.DjangoModelPermissions]
     queryset = Vaccine.objects.all()
     serializer_class = VaccineSerializer
     name = "vaccine-detail"
     
 
 class FacilityList(generics.ListCreateAPIView):
+    permission_classes=[permissions.DjangoModelPermissions, permissions.IsAdminUser]
     queryset = Facility.objects.all()
     serializer_class = FacilitySerializer
     name = " facilities-list"
@@ -93,6 +96,7 @@ class VisitFilter(FilterSet):
     
 
 class VisitList(generics.ListCreateAPIView):
+    permission_classes=[permissions.DjangoModelPermissions, permissions.IsAdminUser]
     queryset = Visit.objects.all()
     serializer_class = VisitSerializer
     name = "visits-list"
@@ -100,6 +104,9 @@ class VisitList(generics.ListCreateAPIView):
     filter_fields = ['visit_date', "visit_time",'id_patient','id_facility','id_vaccine', 'took_place']
     search_fields = ['visit_date', "visit_time",'id_patient','id_facility','id_vaccine']
     ordering_fields = ['visit_date', "visit_time", 'id_facility', 'id_vaccine', 'took_place']
+
+    def perform_create(self, serializer):
+        serializer.save(owner=self.request.user)
 
 
 class VisitDetail(generics.RetrieveUpdateDestroyAPIView):

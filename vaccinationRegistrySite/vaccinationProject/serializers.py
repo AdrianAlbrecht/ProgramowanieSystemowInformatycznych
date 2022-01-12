@@ -12,7 +12,7 @@ class UserSerializer(serializers.HyperlinkedModelSerializer):
     id_user_details = serializers.SlugRelatedField(queryset=UserDetails.objects.all(),slug_field="id")
     class Meta:
         model = User
-        fields = ['url','id', 'id_user_details', 'username','password','role','email','is_active']
+        fields = ['url','id', 'id_user_details','role','is_active']
 
 
 class VaccineSerializer(serializers.HyperlinkedModelSerializer):
@@ -33,4 +33,4 @@ class VisitSerializer(serializers.HyperlinkedModelSerializer):
     id_vaccine = serializers.SlugRelatedField(queryset=Vaccine.objects.all(),slug_field="id")
     class Meta:
         model = Visit
-        fields = ['url','id','visit_date', "visit_time",'id_patient','id_facility','id_vaccine', 'took_place']
+        fields = ['url','id','visit_date', "visit_time",'id_patient','id_facility','id_vaccine', 'took_place', 'owner']
