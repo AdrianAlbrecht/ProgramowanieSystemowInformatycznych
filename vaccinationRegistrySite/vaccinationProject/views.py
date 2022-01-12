@@ -5,7 +5,7 @@ from rest_framework import generics
 from datetime import date
 from rest_framework import status
 from rest_framework.reverse import reverse
-from django_filters import FilterSet, DateFilter, TimeFilter
+from django_filters import FilterSet, DateFilter, TimeFilter, BooleanFilter, NumberFilter, CharFilter, ModelChoiceFilter
 
 
 class Index(generics.GenericAPIView):
@@ -86,6 +86,10 @@ class VisitFilter(FilterSet):
     to_date = DateFilter(field_name = 'visit_date', lookup_expr="lte")
     from_time = TimeFilter(field_name = 'visit_time', lookup_expr="gte")
     to_time = TimeFilter(field_name='visit_time', lookup_expr="lte")
+    took_place = BooleanFilter(field_name='took_place')
+    id_patient = ModelChoiceFilter(queryset = User.objects.all())
+    id_facility = ModelChoiceFilter(queryset=Facility.objects.all())
+    id_vaccine = ModelChoiceFilter(queryset=Vaccine.objects.all())
     
 
 class VisitList(generics.ListCreateAPIView):
