@@ -1,7 +1,7 @@
 from django.shortcuts import render
 from django.http import HttpResponse, request
 import datetime
-
+import logging
 from django.shortcuts import render
 from django.contrib.auth.models import User
 from django.contrib.auth import authenticate
@@ -32,10 +32,7 @@ def changePassword(request):
     user=User.objects.get(username='janek')
     user.set_password('!@#asdasdas')
     user.save()
-    context={
-        'result':'Username %s Password %s' % (user.get_full_name(), user.password)
-    }
-    return render(request,'result.html',context)
+    return render(request,'result.html',)
 
 def setValue(request):
     cache.set('hello_key','Hello World!',100)
@@ -46,12 +43,21 @@ def setValue(request):
 
 def signing(request):
     signer=Signer()
-    value=signer.sign('Mystring')
+    value=signer.sign('admin')
     original = signer.unsign(value)
     context={
         'result':'Value %s Original %s' % (value,original)
     }
+    if(value=='admin:NeoDPLioXYZzR6E1c6wJfoujurJSWUr-Qm3uybZeSvE'):
+        logging.warning("JEST KURWA W PYTE")
     return render(request, 'result.html', context)
+# def signing(request):
+#     logging.warning("Log message goes here.")
+#     signer=Signer()
+#     value=signer.sign('admin')
+#     original = signer.unsign(value)
+    
+    return (value)
 def saltArgument(request):
     singer=Signer()
     value= singer.sign('Mystring')
@@ -63,12 +69,13 @@ def saltArgument(request):
     return render(request, 'result.html', context)
 
 def sendMail(request):
-    send_mail(
-    'Subject here',
-    'Here is the message.',
-    'from@example.com',
-    ['to@example.com'],
-    fail_silently=False,)
+    if('NeoDPLioXYZzR6E1c6wJfoujurJSWUr-Qm3uybZeSvE'=='NeoDPLioXYZzR6E1c6wJfoujurJSWUr-Qm3uybZeSvE'):
+        send_mail(
+        'Subject here',
+        'Here is the message.',
+        'from@example.com',
+        ['roxoxi2876@unigeol.com'],
+        fail_silently=False,)
     return HttpResponse()
 
 def sendObjectMail(request):
@@ -77,7 +84,7 @@ def sendObjectMail(request):
     'Subject here',
     'Here is the message.',
     'from@example.com',
-    ['to@example.com'],
+    ['sendMail'],
     reply_to=['reply@gmail.com'],).send()
     return HttpResponse()
 

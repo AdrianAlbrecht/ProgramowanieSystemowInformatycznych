@@ -79,8 +79,8 @@ EMAIL_HOST = 'smtp.gmail.com'
 EMAIL_PORT = 587
 EMAIL_USE_TLS = True
 EMAIL_USE_LOCALTIME = False
-EMAIL_HOST_USER = 'test.ProgAppWeb@gmail.com'
-EMAIL_HOST_PASSWORD = 'ProgAppWeb'
+EMAIL_HOST_USER = 'tproj854@gmail.com'
+EMAIL_HOST_PASSWORD = 'zaq1@WSX'
 
 CACHES = {
     'default': {
