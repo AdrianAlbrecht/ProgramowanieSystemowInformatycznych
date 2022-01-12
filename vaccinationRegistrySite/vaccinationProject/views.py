@@ -108,10 +108,20 @@ class VisitDetail(generics.RetrieveUpdateDestroyAPIView):
     name = "visit-detail"
     
 
+class FreeVisitFilter(FilterSet):
+    from_date = DateFilter(field_name='visit_date', lookup_expr="gte")
+    to_date = DateFilter(field_name='visit_date', lookup_expr="lte")
+    from_time = TimeFilter(field_name='visit_time', lookup_expr="gte")
+    to_time = TimeFilter(field_name='visit_time', lookup_expr="lte")
+    id_facility = ModelChoiceFilter(queryset=Facility.objects.all())
+    id_vaccine = ModelChoiceFilter(queryset=Vaccine.objects.all())
+    
+
 class FreeVisitList(generics.ListAPIView):
     queryset = Visit.objects.filter(id_patient=None)
     serializer_class = VisitSerializer
     name = "free-visits-list"
+    filter_class = FreeVisitFilter
     filter_fields = ['visit_date', "visit_time", 'id_facility', 'id_vaccine']
     search_fields = ['visit_date', "visit_time", 'id_facility', 'id_vaccine']
     ordering_fields = ['visit_date', "visit_time", 'id_facility', 'id_vaccine']
