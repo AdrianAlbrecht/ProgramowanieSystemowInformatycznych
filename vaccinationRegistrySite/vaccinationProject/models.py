@@ -35,7 +35,7 @@ class User(models.Model):
     is_active = models.BooleanField(default=True)
     
     def __str__(self):
-        return self.username
+        return self.id_user_details.pesel   
 
     
     

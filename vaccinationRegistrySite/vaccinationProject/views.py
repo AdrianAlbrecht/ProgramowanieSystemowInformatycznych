@@ -5,6 +5,7 @@ from rest_framework import generics
 from datetime import date
 from rest_framework import status
 from rest_framework.reverse import reverse
+from django_filters import FilterSet, DateFilter, TimeFilter
 
 
 class Index(generics.GenericAPIView):
@@ -16,6 +17,7 @@ class Index(generics.GenericAPIView):
             'vaccines': reverse(VaccineList.name, request=request),
             'facilities': reverse(FacilityList.name, request=request),
             'visits': reverse(VisitList.name, request=request),
+            'free-visit-list': reverse(FreeVisitList.name, request=request),
         })
     
 
@@ -23,6 +25,9 @@ class UserList(generics.ListCreateAPIView):
     queryset = User.objects.all()
     serializer_class = UserSerializer
     name = 'users-list'
+    filter_fields = ['role', 'is_active']
+    search_fields = ['username', 'role']
+    ordering_fields = ['username', 'role', 'is_active']
     
 
 class UserDetail(generics.RetrieveUpdateDestroyAPIView):
@@ -35,6 +40,9 @@ class UserDetailsList(generics.ListCreateAPIView):
     queryset = UserDetails.objects.all()
     serializer_class = UserDetailSerializer
     name = "userdetails-list"
+    filter_fields = ['country', 'city', 'zip_code','gender', 'is_vaccinated']
+    search_fields = ['firstname','lastname','pesel','date_of_birth','country','city','street','zip_code','phone_number','gender','is_vaccinated']
+    ordering_fields = ['firstname', 'lastname', 'country', 'city', 'gender','is_vaccinated']
     
 
 class UserDetailsDetail(generics.RetrieveUpdateDestroyAPIView):
@@ -47,6 +55,9 @@ class VaccineList(generics.ListCreateAPIView):
     queryset = Vaccine.objects.all()
     serializer_class = VaccineSerializer
     name = "vaccines-list"
+    filter_fields = ['name', 'manufacturer']
+    search_fields = ['name', 'manufacturer', 'expiration_date']
+    ordering_fields = ['name', 'manufacturer', 'expiration_date']
 
 
 class VaccineDetail(generics.RetrieveUpdateDestroyAPIView):
@@ -59,6 +70,9 @@ class FacilityList(generics.ListCreateAPIView):
     queryset = Facility.objects.all()
     serializer_class = FacilitySerializer
     name = " facilities-list"
+    filter_fields = ['country', 'city']
+    search_fields = ['name', 'country', 'city', 'street', 'contact_phone']
+    ordering_fields = ['name', 'country', 'city', 'street']
 
 
 class FacilityDetail(generics.RetrieveUpdateDestroyAPIView):
@@ -67,10 +81,21 @@ class FacilityDetail(generics.RetrieveUpdateDestroyAPIView):
     name = "facility-detail"
     
 
+class VisitFilter(FilterSet):
+    from_date = DateFilter(field_name = 'visit_date', lookup_expr = "gte")
+    to_date = DateFilter(field_name = 'visit_date', lookup_expr="lte")
+    from_time = TimeFilter(field_name = 'visit_time', lookup_expr="gte")
+    to_time = TimeFilter(field_name='visit_time', lookup_expr="lte")
+    
+
 class VisitList(generics.ListCreateAPIView):
     queryset = Visit.objects.all()
     serializer_class = VisitSerializer
     name = "visits-list"
+    filter_class = VisitFilter
+    filter_fields = ['visit_date', "visit_time",'id_patient','id_facility','id_vaccine', 'took_place']
+    search_fields = ['visit_date', "visit_time",'id_patient','id_facility','id_vaccine']
+    ordering_fields = ['visit_date', "visit_time", 'id_facility', 'id_vaccine', 'took_place']
 
 
 class VisitDetail(generics.RetrieveUpdateDestroyAPIView):
@@ -80,9 +105,12 @@ class VisitDetail(generics.RetrieveUpdateDestroyAPIView):
     
 
 class FreeVisitList(generics.ListAPIView):
-    queryset = Visit.objects.filter(id_patient=None, visit_date__gte=date.today()).order_by('visit_date', 'visit_time')
+    queryset = Visit.objects.filter(id_patient=None)
     serializer_class = VisitSerializer
     name = "free-visits-list"
+    filter_fields = ['visit_date', "visit_time", 'id_facility', 'id_vaccine']
+    search_fields = ['visit_date', "visit_time", 'id_facility', 'id_vaccine']
+    ordering_fields = ['visit_date', "visit_time", 'id_facility', 'id_vaccine']
     
 
 # TODO: show only active user profile    
