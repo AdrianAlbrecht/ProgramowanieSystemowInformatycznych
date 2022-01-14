@@ -3,7 +3,7 @@ from .models import *
 from .serializers import *
 from rest_framework import generics
 from datetime import date
-from rest_framework import status
+from rest_framework import status, permissions
 from rest_framework.reverse import reverse
 from django_filters import FilterSet, DateFilter, TimeFilter, BooleanFilter, NumberFilter, CharFilter, ModelChoiceFilter
 
@@ -18,6 +18,7 @@ class Index(generics.GenericAPIView):
             'facilities': reverse(FacilityList.name, request=request),
             'visits': reverse(VisitList.name, request=request),
             'free-visit-list': reverse(FreeVisitList.name, request=request),
+            'profile': reverse(Profile.name, request=request),
         })
     
 
@@ -129,15 +130,17 @@ class FreeVisitList(generics.ListAPIView):
 
 # TODO: show only active user profile    
 class Profile(generics.ListAPIView):
+    permission_classes=[permissions.DjangoModelPermissions]
     queryset = UserDetails.objects.all()
     serializer_class = UserDetailSerializer
     name = "profile"
     
-    def get_queryset(self):
-        return UserDetails.objects.filter(pk=self.kwargs['profile_id'])
+    def get_queryset(self, username=0):
+        return UserDetails.objects.filter(user=username)
     
     def list(self, request, *args, **kwargs):
-        queryset = self.filter_queryset(self.get_queryset())
+        username = request.user.id
+        queryset = self.filter_queryset(self.get_queryset(username))
         if not queryset.exists():
             return Response({"detail": "Not found."}, status=status.HTTP_404_NOT_FOUND)
 

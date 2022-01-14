@@ -1,4 +1,5 @@
 from django.urls import path
+from django.urls import include
 from . import views
 
 urlpatterns = [
@@ -14,5 +15,7 @@ urlpatterns = [
     path('visits', views.VisitList.as_view(), name=views.VisitList.name),
     path('visits/<int:pk>', views.VisitDetail.as_view(), name=views.VisitDetail.name),
     path('freevisits', views.FreeVisitList.as_view(), name=views.FreeVisitList.name),
-    path('profile<int:profile_id>', views.Profile.as_view(), name=views.Profile.name),
+    path('profile', views.Profile.as_view(), name=views.Profile.name),
+    path('api-auth/', include('rest_framework.urls', namespace='rest_framework')),
+    
 ]

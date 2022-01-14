@@ -1,4 +1,5 @@
 from django.db import models
+from django.contrib.auth.models import User as AuthUser
 
 # created = models.DateTimeField(auto_now_add=True)
 # title = models.CharField(max_length=100, blank=True, null=True, default='')
@@ -20,14 +21,14 @@ class UserDetails(models.Model):
     phone_number = models.CharField(max_length=12)
     gender = models.CharField(max_length=45)
     is_vaccinated = models.BooleanField(default=False)
+    user = models.OneToOneField(AuthUser, on_delete=models.CASCADE, null=True)
     
     def __str__(self):
         return self.pesel
 
 
 class User(models.Model):
-    id_user_details = models.OneToOneField(
-        UserDetails, related_name="user",  on_delete=models.CASCADE)
+    #id_user_details = models.OneToOneField(UserDetails, related_name="user",  on_delete=models.CASCADE)
     username = models.CharField(max_length=45)
     password = models.CharField(max_length=45)
     role = models.CharField(max_length=45)

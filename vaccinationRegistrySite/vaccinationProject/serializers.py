@@ -1,18 +1,20 @@
 from rest_framework import serializers
 from .models import *
+from django.contrib.auth.models import User as AuthUser
 
 class UserDetailSerializer(serializers.HyperlinkedModelSerializer):
     apartament_number = serializers.CharField(required=False)
+    user = serializers.SlugRelatedField(queryset=AuthUser.objects.all(),slug_field="username")
     class Meta:
         model = UserDetails
-        fields = ['url','id', 'firstname','lastname','pesel','date_of_birth','country','city','street','house_number','apartament_number','zip_code','phone_number','gender','is_vaccinated']
+        fields = ['url','id' , 'user', 'firstname','lastname','pesel','date_of_birth','country','city','street','house_number','apartament_number','zip_code','phone_number','gender','is_vaccinated']
 
 
 class UserSerializer(serializers.HyperlinkedModelSerializer):
-    id_user_details = serializers.SlugRelatedField(queryset=UserDetails.objects.all(),slug_field="id")
+    #id_user_details = serializers.SlugRelatedField(queryset=UserDetails.objects.all(),slug_field="id")
     class Meta:
         model = User
-        fields = ['url','id', 'id_user_details', 'username','password','role','email','is_active']
+        fields = ['url','id', 'username','password','role','email','is_active'] #'id_user_details'
 
 
 class VaccineSerializer(serializers.HyperlinkedModelSerializer):
