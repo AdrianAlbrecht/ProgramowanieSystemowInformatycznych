@@ -12,6 +12,15 @@ class UserDetailSerializer(serializers.HyperlinkedModelSerializer):
         fields = ['url','id' , 'user', 'firstname','lastname','pesel','date_of_birth','country','city','street','house_number','apartament_number','zip_code','phone_number','gender','is_vaccinated']
 
 
+class UserDetailVacinatedSerializer(serializers.HyperlinkedModelSerializer):
+    apartament_number = serializers.CharField(required=False)
+    user = serializers.SlugRelatedField(queryset=AuthUser.objects.all(),slug_field="username")
+    url = serializers.HyperlinkedIdentityField(view_name='userdetails-vacinated')
+    class Meta:
+        model = UserDetails
+        fields = ['url','id' , 'user', 'firstname','lastname','pesel','date_of_birth','country','city','street','house_number','apartament_number','zip_code','phone_number','gender','is_vaccinated']
+
+
 class UserSerializer(serializers.HyperlinkedModelSerializer):
     #id_user_details = serializers.SlugRelatedField(queryset=UserDetails.objects.all(),slug_field="id")
     class Meta:
@@ -35,6 +44,15 @@ class VisitSerializer(serializers.HyperlinkedModelSerializer):
     id_patient = serializers.SlugRelatedField(queryset=AuthUser.objects.all(),slug_field="id", required=False)
     id_facility = serializers.SlugRelatedField(queryset=Facility.objects.all(),slug_field="id")
     id_vaccine = serializers.SlugRelatedField(queryset=Vaccine.objects.all(),slug_field="id")
+    class Meta:
+        model = Visit
+        fields = ['url','id','visit_date', "visit_time",'id_patient','id_facility','id_vaccine', 'took_place']
+        
+class VisitConfirmSerializer(serializers.HyperlinkedModelSerializer):
+    id_patient = serializers.SlugRelatedField(queryset=AuthUser.objects.all(),slug_field="id", required=False)
+    id_facility = serializers.SlugRelatedField(queryset=Facility.objects.all(),slug_field="id")
+    id_vaccine = serializers.SlugRelatedField(queryset=Vaccine.objects.all(),slug_field="id")
+    url = serializers.HyperlinkedIdentityField(view_name='visit-confirm')
     class Meta:
         model = Visit
         fields = ['url','id','visit_date', "visit_time",'id_patient','id_facility','id_vaccine', 'took_place']
@@ -81,4 +99,19 @@ class MyVisitDetailSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
         model = Visit
         fields = ['url','id','visit_date', "visit_time",'id_patient','id_facility','id_vaccine', 'took_place']
+
+
+class MyVisitCancelSerializer(serializers.HyperlinkedModelSerializer):
+    id_patient = serializers.SlugRelatedField(queryset=AuthUser.objects.all(),slug_field="id", required=False)
+    id_facility = serializers.SlugRelatedField(queryset=Facility.objects.all(),slug_field="id")
+    id_vaccine = serializers.SlugRelatedField(queryset=Vaccine.objects.all(),slug_field="id")
+    url = serializers.HyperlinkedIdentityField(view_name='my-visits-cancel')
+    class Meta:
+        model = Visit
+        fields = ['url','id','visit_date', "visit_time",'id_patient','id_facility','id_vaccine', 'took_place']
+        
+    def update(self, instance, validated_data):
+        instance.id_patient = validated_data.get('id_patient', instance.id_patient)
+        instance.save()
+        return instance
     

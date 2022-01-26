@@ -58,8 +58,26 @@ class UserDetailsList(generics.ListCreateAPIView):
 class UserDetailsDetail(generics.RetrieveUpdateDestroyAPIView):
     permission_classes = [permissions.IsAdminUser]
     queryset = UserDetails.objects.all()
-    serializer_class = UserDetailSerializer
+    serializer_class = UserDetailVacinatedSerializer
     name = "userdetails-detail"
+    
+    
+class UserDetailsVacinated(generics.RetrieveUpdateDestroyAPIView):
+    permission_classes = [permissions.IsAdminUser]
+    queryset = UserDetails.objects.all()
+    serializer_class = UserDetailVacinatedSerializer
+    name = "userdetails-vacinated"
+    
+    def get(self, request, *args, **kwargs):
+        instance = self.get_object()
+        if(instance.is_vaccinated == True):
+            return Response({"detail": "This patient is already vaccinated"}, status=status.HTTP_406_NOT_ACCEPTABLE)
+        else:
+            instance.is_vaccinated = True
+            instance.save()
+
+            return Response({"detail": "You have successfully make this patient vaccinated! Good work! Got userDetails do see more", "url": "http://127.0.0.1:8000/userDetails"}, status=status.HTTP_200_OK)
+
 
 
 class VaccineList(generics.ListCreateAPIView):
@@ -118,11 +136,29 @@ class VisitList(generics.ListCreateAPIView):
     ordering_fields = ['visit_date', "visit_time", 'id_facility', 'id_vaccine', 'took_place']
 
 
-class VisitDetail(generics.RetrieveUpdateDestroyAPIView):
+class VisitDetail(generics.RetrieveAPIView):
     permission_classes = [permissions.IsAdminUser]
     queryset = Visit.objects.all()
-    serializer_class = VisitSerializer
+    serializer_class = VisitConfirmSerializer
     name = "visit-detail"
+    
+
+class VisitConfirm(generics.RetrieveAPIView):
+    permission_classes = [permissions.IsAdminUser]
+    queryset = Visit.objects.all()
+    serializer_class = VisitConfirmSerializer
+    name = "visit-confirm"
+    
+    def get(self, request, *args, **kwargs):
+        instance = self.get_object()
+        if(instance.id_patient == None):
+            return Response({"detail": "This visit hasn't any patient. :) Cannot confirm..."}, status=status.HTTP_406_NOT_ACCEPTABLE)
+        else:
+            instance.took_place = True
+            instance.save()
+
+            return Response({"detail": "You have successfully confirm to this visit. :) Go to visits to see more", "url": "http://127.0.0.1:8000/visits"}, status=status.HTTP_200_OK)
+
     
 
 class FreeVisitFilter(FilterSet):
@@ -152,19 +188,19 @@ class FreeVisitDetail(generics.RetrieveAPIView):
     name = "free-visit-detail"
     
 
-#TODO: FreeVisitRegister with get_object(self)
-class FreeVisitRegister(generics.RetrieveUpdateAPIView):
+class FreeVisitRegister(generics.RetrieveAPIView):
     permission_classes = [permissions.DjangoModelPermissions]
     queryset = Visit.objects.all()
     serializer_class = FreeVisitSerializerRegister
     name = "free-visit-register"
     
-    
     def get(self, request, *args, **kwargs):
         czy = False
         for vi in Visit.objects.filter(id_patient=request.user):
             if vi.took_place == False:
-                czy = True            
+                czy = True 
+        if UserDetails.objects.filter(user=request.user)[0].is_vaccinated:
+            czy = True
         if(czy):
             return Response({"detail": "You have not done visits or you're fully vaccinated."}, status=status.HTTP_406_NOT_ACCEPTABLE)
         else:
@@ -218,9 +254,25 @@ class MyVisits(generics.ListAPIView):
         return Response(serializer.data)
     
 
-class MyVisitsDetail(generics.UpdateAPIView):
+class MyVisitsDetail(generics.RetrieveAPIView):
     permission_classes = [permissions.IsAuthenticated]
     queryset = Visit.objects.all()
-    serializer_class = MyVisitDetailSerializer
+    serializer_class = MyVisitCancelSerializer
     name = "my-visits-detail"
     
+    
+class MyVisitsCancel(generics.RetrieveAPIView):
+    permission_classes = [permissions.IsAuthenticated]
+    queryset = Visit.objects.all()
+    serializer_class = MyVisitCancelSerializer
+    name = "my-visits-cancel"
+    
+    def get(self, request, *args, **kwargs):
+        instance = self.get_object()
+        if(instance.took_place == False):
+            instance.id_patient = None
+            instance.save()
+
+            return Response({"detail": "You have successfully cancel this visit. :) Go to my free visits to see more", "url": "http://127.0.0.1:8000/freevisits"}, status=status.HTTP_200_OK)
+        else:
+            return Response({"detail": "This visit is done. :)"}, status=status.HTTP_406_NOT_ACCEPTABLE)
