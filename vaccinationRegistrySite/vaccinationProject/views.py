@@ -1,4 +1,5 @@
 from rest_framework.response import Response
+from sqlalchemy import null
 from .models import *
 from .serializers import *
 from rest_framework import generics
@@ -150,12 +151,12 @@ class FreeVisitDetail(generics.RetrieveAPIView):
     
 
 #TODO: FreeVisitRegister with get_object(self)
-class FreeVisitRegister(generics.RetrieveAPIView):
-    permission_classes = [permissions.IsAuthenticated]
+class FreeVisitRegister(generics.UpdateAPIView):
+    permission_classes = [permissions.DjangoModelPermissions]
     queryset = Visit.objects.all()
     serializer_class = FreeVisitSerializerRegister
     name = "free-visit-register"
-    
+        
   
 class Profile(generics.ListAPIView):
     permission_classes=[permissions.DjangoModelPermissions]
@@ -200,7 +201,7 @@ class MyVisits(generics.ListAPIView):
         return Response(serializer.data)
     
 
-class MyVisitsDetail(generics.RetrieveAPIView):
+class MyVisitsDetail(generics.UpdateAPIView):
     permission_classes = [permissions.IsAuthenticated]
     queryset = Visit.objects.all()
     serializer_class = MyVisitDetailSerializer
