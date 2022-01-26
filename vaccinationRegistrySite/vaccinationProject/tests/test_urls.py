@@ -9,4 +9,3 @@ class TestUrls(SimpleTestCase):
         url=reverse(views.UserList.name)
         print(resolve(url))
         self.assertEquals(resolve(url).func,UserList)
-
