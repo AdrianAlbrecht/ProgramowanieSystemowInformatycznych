@@ -25,19 +25,6 @@ class UserDetails(models.Model):
     
     def __str__(self):
         return self.pesel
-
-
-# class User(models.Model):
-#     #id_user_details = models.OneToOneField(UserDetails, related_name="user",  on_delete=models.CASCADE)
-#     username = models.CharField(max_length=45)
-#     password = models.CharField(max_length=45)
-#     role = models.CharField(max_length=45)
-#     email = models.EmailField(max_length=45)
-#     is_active = models.BooleanField(default=True)
-    
-#     def __str__(self):
-#         return self.id_user_details.pesel   
-
     
     
 class Vaccine(models.Model):

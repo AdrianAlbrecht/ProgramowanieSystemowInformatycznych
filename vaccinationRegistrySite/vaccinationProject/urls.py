@@ -1,3 +1,4 @@
+from django.contrib import admin
 from django.urls import path
 from django.urls import include
 from . import views
@@ -24,5 +25,4 @@ urlpatterns = [
     path('profile/my-visits/<int:pk>', views.MyVisitsDetail.as_view(), name=views.MyVisitsDetail.name),
     path('profile/my-visits/<int:pk>/cancel', views.MyVisitsCancel.as_view(), name=views.MyVisitsCancel.name),
     path('api-auth/', include('rest_framework.urls', namespace='rest_framework')),
-    
 ]
