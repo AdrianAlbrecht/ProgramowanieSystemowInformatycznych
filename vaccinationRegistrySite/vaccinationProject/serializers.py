@@ -56,6 +56,11 @@ class FreeVisitSerializerRegister(serializers.HyperlinkedModelSerializer):
     class Meta:
         model = Visit
         fields = ['url','id','visit_date', "visit_time",'id_patient','id_facility','id_vaccine', 'took_place']
+    
+    def update(self, instance, validated_data):
+        instance.id_patient = validated_data.get('id_patient', instance.id_patient)
+        instance.save()
+        return instance
         
         
 class ProfileSerializer(serializers.HyperlinkedModelSerializer):

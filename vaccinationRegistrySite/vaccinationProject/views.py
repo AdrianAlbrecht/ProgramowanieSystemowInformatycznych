@@ -1,4 +1,6 @@
 from rest_framework.response import Response
+import json
+from django.http import HttpResponse
 from sqlalchemy import null
 from .models import *
 from .serializers import *
@@ -151,11 +153,26 @@ class FreeVisitDetail(generics.RetrieveAPIView):
     
 
 #TODO: FreeVisitRegister with get_object(self)
-class FreeVisitRegister(generics.UpdateAPIView):
+class FreeVisitRegister(generics.RetrieveUpdateAPIView):
     permission_classes = [permissions.DjangoModelPermissions]
     queryset = Visit.objects.all()
     serializer_class = FreeVisitSerializerRegister
     name = "free-visit-register"
+    
+    
+    def get(self, request, *args, **kwargs):
+        czy = False
+        for vi in Visit.objects.filter(id_patient=request.user):
+            if vi.took_place == False:
+                czy = True            
+        if(czy):
+            return Response({"detail": "You have not done visits or you're fully vaccinated."}, status=status.HTTP_406_NOT_ACCEPTABLE)
+        else:
+            instance = self.get_object()
+            instance.id_patient = request.user
+            instance.save()
+
+            return Response({"detail": "You have successfully registered to this visit. :) Go to my visits to see more", "url": "http://127.0.0.1:8000/profile/my-visits"}, status=status.HTTP_200_OK)
         
   
 class Profile(generics.ListAPIView):
