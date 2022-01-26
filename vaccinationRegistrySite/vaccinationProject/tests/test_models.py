@@ -2,12 +2,12 @@
 
 from django.test import TestCase
 
-from vaccinationRegistrySite.vaccinationProject.models import UserDetails, Vaccine
+from vaccinationProject.models import UserDetails, Vaccine
 
 
 class TestModels(TestCase):
     def setUp(self):
-        self.user1=UserDetails.object.create(
+        self.user1=UserDetails.objects.create(
             firstname = 'Karol',
             lastname = 'Wallen',
             pesel = '62091692878',
@@ -22,14 +22,14 @@ class TestModels(TestCase):
             gender = 'male',
             is_vaccinated = True
         )
-    def test_userDetails(self):
-        self.assertEquals(self.user1.slug,'karol')
-    
-    def testVaccine(self):
-        self.vaccine1=Vaccine.objects.create(
-            name = 'Pfizer',
-            manufacturer = 'PfizerCorporation',
-            expiration_date= '1999-11-21'
+        self.vaccine1 = Vaccine.objects.create(
+            name='Pfizer',
+            manufacturer='PfizerCorporation',
+            expiration_date='1999-11-21'
         )
+        
+    def test_userDetails(self):
+        self.assertEquals(self.user1.firstname,'Karol')
+    
     def test_vaccine(self):
-        self.assertEquals(self.vaccine1.slug,'pfizer')
+        self.assertEquals(self.vaccine1.name,'Pfizer')
