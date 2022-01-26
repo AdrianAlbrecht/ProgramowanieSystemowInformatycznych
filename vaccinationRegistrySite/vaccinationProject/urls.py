@@ -15,7 +15,11 @@ urlpatterns = [
     path('visits', views.VisitList.as_view(), name=views.VisitList.name),
     path('visits/<int:pk>', views.VisitDetail.as_view(), name=views.VisitDetail.name),
     path('freevisits', views.FreeVisitList.as_view(), name=views.FreeVisitList.name),
+    path('freevisits/<int:pk>', views.FreeVisitDetail.as_view(), name=views.FreeVisitDetail.name),
+    path('freevisits/<int:pk>/register', views.FreeVisitRegister.as_view(), name=views.FreeVisitRegister.name),
     path('profile', views.Profile.as_view(), name=views.Profile.name),
+    path('profile/my-visits', views.MyVisits.as_view(), name=views.MyVisits.name),
+    path('profile/my-visits/<int:pk>', views.MyVisitsDetail.as_view(), name=views.MyVisitsDetail.name),
     path('api-auth/', include('rest_framework.urls', namespace='rest_framework')),
     
 ]

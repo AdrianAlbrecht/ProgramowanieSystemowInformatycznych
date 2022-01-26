@@ -27,16 +27,16 @@ class UserDetails(models.Model):
         return self.pesel
 
 
-class User(models.Model):
-    #id_user_details = models.OneToOneField(UserDetails, related_name="user",  on_delete=models.CASCADE)
-    username = models.CharField(max_length=45)
-    password = models.CharField(max_length=45)
-    role = models.CharField(max_length=45)
-    email = models.EmailField(max_length=45)
-    is_active = models.BooleanField(default=True)
+# class User(models.Model):
+#     #id_user_details = models.OneToOneField(UserDetails, related_name="user",  on_delete=models.CASCADE)
+#     username = models.CharField(max_length=45)
+#     password = models.CharField(max_length=45)
+#     role = models.CharField(max_length=45)
+#     email = models.EmailField(max_length=45)
+#     is_active = models.BooleanField(default=True)
     
-    def __str__(self):
-        return self.id_user_details.pesel   
+#     def __str__(self):
+#         return self.id_user_details.pesel   
 
     
     
@@ -63,7 +63,7 @@ class Facility(models.Model):
 class Visit(models.Model):
     visit_date = models.DateField(blank=True, default='1000-01-01')
     visit_time = models.TimeField(blank=True, default='00:00:00')
-    id_patient = models.ForeignKey(User, related_name='visit', null=True, blank=True, on_delete=models.DO_NOTHING)
+    id_patient = models.ForeignKey(AuthUser, related_name='visit', null=True, blank=True, on_delete=models.DO_NOTHING)
     id_facility = models.ForeignKey(Facility, related_name='visit', null=False, blank=False, on_delete=models.DO_NOTHING)
     id_vaccine = models.ForeignKey(Vaccine, related_name='visit', null=False, blank=False, on_delete=models.DO_NOTHING)
     took_place=models.BooleanField(default=0)
